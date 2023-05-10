@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Red Castle</title>
+</head>
+<body>
+	<div>
+		<p id="game-text">Welcome to Red Castle.</p>
+		<input type="text" id="input" placeholder="Enter your command">
+		<button onclick="playGame()">Enter</button>
+	</div>
+
+	<script>
+		let playerLocation = "castle";
+		let hasKey = false;
+		let inventory = [];
+
+		const locations = {
+			"castle": {
+				"description": "You are in Red Castle.",
+				"north": "stables",
+				"south": "garden",
+				"east": "sea",
+				"west": "greenhouse"
+			},
+			"stables": {
+				"description": "You are in the stables. It smells of horses.",
+				"south": "castle"
+			},
+			"garden": {
+				"description": "You are in the garden. It's full of beautiful flowers.",
+				"north": "castle"
+			},
+			"greenhouse": {
+				"description": "You are in the greenhouse. There are many plants.",
+				"east": "castle",
+				"key": {
+					"description": "There is a key on the table.",
+					"take": function() {
+						hasKey = true;
+						return "You take the key.";
+					}
+				}
+			},
+			"sea": {
+				"description": "You are by the sea. You can see waves crashing on the shore.",
+				"west": "castle"
+			},
+			"tunnel": {
+				"description": "You are in a dark tunnel. It smells of damp earth.",
+				"north": "cave"
+			},
+			"cave": {
+				"description": "You are in a cave. It's cold and damp. You can see a light at the end of the tunnel.",
+				"south": "tunnel"
+			}
+		}
+
+		function playGame() {
+			let input = document.getElementById("input").value;
+			let command = input.toLowerCase().split(" ");
+			let output = "";
+
+			if (command[0] === "go") {
+				if (locations[playerLocation][command[1]] !== undefined) {
+					playerLocation = locations[playerLocation][command[1]];
+					output += "You go " + command[1] + ". ";
+					output += locations[playerLocation]["description"];
+					if (playerLocation === "greenhouse" && !hasKey) {
+						output += " " + locations[playerLocation]["key"]["description"];
+					}
+				} else {
+					output += "You cannot go that way.";
+				}
+			} 
+
+
+
+			else if (command[0] === "look") {
+				output += locations[playerLocation]["description"] + " Available directions: ";
+				let directions = [];
+				for (let direction in locations[playerLocation]) {
+					if (direction !== "description" && direction !== "key") {
+						directions.push(direction);
+					}
+				}
+				output += directions.join(", ");
+				if (playerLocation === "greenhouse" && !hasKey) {
+					output += ". " + locations[playerLocation]["key"]["description"];
+				}
+			} 
+
+
+			else if (command[0] === "get") {
+				if (command[1] === "key" && playerLocation === "greenhouse") {
+					inventory.push("key");
+					locations["greenhouse"]["key"] = false;
+					output += "You get the key.";
+				} else {
+					output += "You cannot get that.";
+				}
+			}
+
+
+			else if (command[0] === "inv") {
+				if (inventory.length === 0) {
+					output += "Your inventory is empty.";
+				} else {
+					output += "Your inventory contains: " + inventory.join(", ");
+				}
+			}
+
+
+			else {
+				output += "Invalid command.";
+			}
+
+			document.getElementById("game-text").innerHTML = output;
+			document.getElementById("input").value = "";
+		}
+
+		document.getElementById("input").addEventListener("keyup", function(event) {
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				document.getElementById("enter-btn").click();
+			}
+		});
+	</script>
+</body>
+</html>
