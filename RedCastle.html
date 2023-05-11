@@ -5,8 +5,17 @@
 	<title>Red Castle</title>
 </head>
 <body>
+	<p>Welcome to Red Castle! You find yourself in a medieval castle filled with mysteries and treasures to uncover. Your goal is to explore the castle and discover its secrets. To navigate through the castle, you can use the following commands:</p>
+	<ul>
+		<li><b>go [direction]</b>: move to a new location in the castle, where [direction] can be north, south, east, or west.</li>
+		<li><b>look</b>: get a description of your current location and the available directions.</li>
+		<li><b>get [item]</b>: pick up an item in your current location, where [item] is the name of the item.</li>
+		<li><b>inv</b>: check your inventory of items that you have picked up.</li>
+	</ul>
+
+
 	<div>
-		<p id="game-text">Welcome to Red Castle.</p>
+		<p id="game-text">Enter a command to start playing!</p>
 		<input type="text" id="input" placeholder="What shall I do now?">
 		<button onclick="playGame()">Enter</button>
 	</div>
@@ -137,13 +146,9 @@
 			document.getElementById("input").value = "";
 		}
 		
-		// Add event listener for pressing the enter key
-		document.getElementById("input").addEventListener("keyup", function(event) {
-			// If the enter key is pressed, click the Enter button
-			if (event.keyCode === 13) {
-				event.preventDefault();
-				document.getElementById("enter-btn").click();
-			}
+  		document.getElementById("input").addEventListener("keyup", function(event) {
+  		// Get the value of the text input element.
+  		var input = event.target.value;
 		});
 	</script>
 </body>
