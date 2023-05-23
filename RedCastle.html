@@ -3,11 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Red Castle</title>
-</head>
+  	<style>
+    	@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-<p> test</p>
+    body {
+      padding-left: 50px;
+    }
+
+    p, li {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      width: 30%;
+    }
+    
+    .large-text {
+      	font-family: 'Press Start 2P', cursive;
+      	font-size: 24px;
+      	letter-spacing: 2px;
+      	text-transform: uppercase;
+    }
+  	</style>
+
+
+
+</head>
 <body>
-	<p>Welcome to Red Castle! You find yourself in a medieval castle filled with mysteries and treasures to uncover. Your goal is to explore the castle and discover its secrets. To navigate through the castle, you can use the following commands:</p>
+    <p class="large-text">Welcome to Red Castle!</p>
+
+	<p>You find yourself in a medieval castle filled with mysteries and treasures to uncover. Your goal is to explore the castle and discover its secrets. To navigate through the castle, you can use the following commands:</p>
 	<ul>
 		<li><b>go [direction]</b>: move to a new location in the castle, where [direction] can be north, south, east, or west.</li>
 		<li><b>look</b>: get a description of your current location and the available directions.</li>
@@ -16,9 +39,11 @@
 	</ul>
 
 	<div>
-		<p id="game-text">Enter a command to start playing!</p>
+
 		<input type="text" id="input" placeholder="What shall I do now?">
 		<button onclick="playGame()">Enter</button>
+
+		<p id="game-text">Enter a command to start playing!</p>
 	</div>
 
 	<script>
