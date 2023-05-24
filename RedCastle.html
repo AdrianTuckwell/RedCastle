@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Red Castle</title>
-  	<style>
-    	@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  <meta charset="UTF-8">
+  <title>Red Castle - Text Adventure Game</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     body {
       padding-left: 50px;
@@ -13,169 +13,207 @@
     p, li {
       font-family: 'Courier New', Courier, monospace;
       font-size: 14px;
-      width: 30%;
+      width: 100%;
     }
     
     .large-text {
-      	font-family: 'Press Start 2P', cursive;
-      	font-size: 24px;
-      	letter-spacing: 2px;
-      	text-transform: uppercase;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
-  	</style>
-
-
-
+  </style>
 </head>
 <body>
-    <p class="large-text">Welcome to Red Castle!</p>
+  <p class="large-text">Welcome to Red Castle!</p>
 
-	<p>You find yourself in a medieval castle filled with mysteries and treasures to uncover. Your goal is to explore the castle and discover its secrets. To navigate through the castle, you can use the following commands:</p>
-	<ul>
-		<li><b>go [direction]</b>: move to a new location in the castle, where [direction] can be north, south, east, or west.</li>
-		<li><b>look</b>: get a description of your current location and the available directions.</li>
-		<li><b>get [item]</b>: pick up an item in your current location, where [item] is the name of the item.</li>
-		<li><b>inv</b>: check your inventory of items that you have picked up.</li>
-	</ul>
+  <p>
+    You find yourself driving along the shore road on the Beauly Firth. The year is 1957, and it's approaching midnight.
+    The rain pours down as darkness engulfs the surroundings. You're behind the wheel of a Standard Motor Company model Ten car, navigating
+    the treacherous weather.
+  </p>
 
-	<div>
+  <p>
+    As you round a bend, your car suddenly splutters and comes to a halt. You attempt to restart it, but the engine
+    refuses to cooperate. Frustration sets in as you realize you're stranded in the middle of nowhere.
+  </p>
 
-		<input type="text" id="input" placeholder="What shall I do now?">
-		<button onclick="playGame()">Enter</button>
+  <p>
+    You step out of the car into the stormy night, the rain beating down upon you. With a sense of urgency, you scan
+    your surroundings, searching for any sign of help or shelter.
+  </p>
 
-		<p id="game-text">Enter a command to start playing!</p>
-	</div>
+  <p>
+    Prepare to embark on a thrilling adventure, where every decision you make will shape your destiny. Will you find a
+    way to escape this predicament and unravel the mysteries that lie ahead? The choice is yours...
+  </p>
 
-	<script>
-		// Initialize game variables
-		let playerLocation = "castle";
-		let hasKey = false;
-		let inventory = [];
+  <ul>
+    <li><b>go [direction]</b>: move to a new location in the castle, where [direction] can be north, south, east, or west.</li>
+    <li><b>look</b>: get a description of your current location and the available directions.</li>
+    <li><b>get [item]</b>: pick up an item in your current location, where [item] is the name of the item.</li>
+    <li><b>inv</b>: check your inventory of items that you have picked up.</li>
+  </ul>
 
-		// Define game locations and their properties
-		const locations = {
-			"castle": {
-				"description": "You are in Red Castle.",
-				"north": "stables",
-				"south": "garden",
-				"east": "sea",
-				"west": "greenhouse"
-			},
-			"stables": {
-				"description": "You are in the stables. It smells of horses.",
-				"south": "castle"
-			},
-			"garden": {
-				"description": "You are in the garden. It's full of beautiful flowers.",
-				"north": "castle"
-			},
-			"greenhouse": {
-				"description": "You are in the greenhouse. There are many plants.",
-				"east": "castle",
-				"key": {
-					"description": "There is a key on the table.",
-					"take": function() {
-						hasKey = true;
-						return "You take the key.";
-					}
-				}
-			},
-			"sea": {
-				"description": "You are by the sea. You can see waves crashing on the shore.",
-				"west": "castle"
-			},
-			"tunnel": {
-				"description": "You are in a dark tunnel. It smells of damp earth.",
-				"north": "cave"
-			},
-			"cave": {
-				"description": "You are in a cave. It's cold and damp. You can see a light at the end of the tunnel.",
-				"south": "tunnel"
-			}
-			// Add more locations if desired
+  <div>
+    <input type="text" id="input" placeholder="What shall I do now?">
+    <button onclick="playGame()">Enter</button>
+    <p id="game-text">Enter a command to start playing!</p>
+  </div>
 
-		}
+  <script>
+    // Initialize game variables
+    let playerLocation = "shore";
+    let hasKey = false;
+    let doorOpen = false;
+    let inventory = [];
 
-		// Define game functions
-		function playGame() {
-			// Get user input and parse it
-			let input = document.getElementById("input").value;
-			let command = input.toLowerCase().split(" ");
-			let output = "";
+    // Define game locations and their properties
+    const locations = {
+      "shore": {
+        "description": "You stand on the desolate Shore Road, caught between the vast expanse of the sea and a towering, weathered wall. The crashing waves create an eerie symphony, filling the air with anticipation. To your left, the restless tides reveal hints of the unknown, while to your right, a weathered door stands out against the aged brickwork of a high long wall.",
+        "north": "garden",
+        "open door": function() {
+          if (!doorOpen && playerLocation === "shore") {
+            doorOpen = true;
+            return "You open the door, revealing a passage to the north.";
+          } else if (doorOpen) {
+            return "The door is already open.";
+          } else {
+            return "There is no door to open here.";
+          }
+        }
+      },
+      "garden": {
+        "description": "You are in the garden. It's full of beautiful flowers.",
+        "north": "castle",
+        "south": "shore"
+      },
+      "castle": {
+        "description": "You are standing outside a Castle.",
+        "north": "stables",
+        "south": "garden",
+        "east": "sea",
+        "west": "greenhouse"
+      },
+      "stables": {
+        "description": "You are in the stables. It smells of horses.",
+        "south": "castle"
+      },
+      "greenhouse": {
+        "description": "You are in the greenhouse. There are many plants.",
+        "east": "castle",
+        "key": {
+          "description": "There is a key on the table.",
+          "take": function() {
+            hasKey = true;
+            return "You take the key.";
+          }
+        }
+      },
+      "sea": {
+        "description": "You are by the sea. You can see waves crashing on the shore.",
+        "west": "castle"
+      },
+      "tunnel": {
+        "description": "You are in a dark tunnel. It smells of damp earth.",
+        "north": "cave"
+      },
+      "cave": {
+        "description": "You are in a cave. It's cold and damp. You can see a light at the end of the tunnel.",
+        "south": "tunnel"
+      }
+      // Add more locations if desired
+    }
 
-			// Process user input based on command
-			if (command[0] === "go") {
-				if (locations[playerLocation][command[1]] !== undefined) {
+    // Define game functions
+    function playGame() {
+      // Get user input and parse it
+      let input = document.getElementById("input").value;
+      let command = input.toLowerCase().split(" ");
+      let output = "";
 
-					// Move player to new location and update output
-					playerLocation = locations[playerLocation][command[1]];
-					output += "You go " + command[1] + ". ";
-					output += locations[playerLocation]["description"];
+      // Process user input based on command
+      if (command[0] === "go") {
+        if (locations[playerLocation][command[1]] !== undefined) {
+          // Check if the door is open when trying to go north from the shore
+          if (playerLocation === "shore" && command[1] === "north" && !doorOpen) {
+            output += "The door is closed. You cannot go north.";
+          } else {
+            // Move player to new location and update output
+            playerLocation = locations[playerLocation][command[1]];
+            output += "You go " + command[1] + ". ";
+            output += locations[playerLocation]["description"];
 
-					// Check for key in the greenhouse
-					if (playerLocation === "greenhouse" && !hasKey) {
-						output += " " + locations[playerLocation]["key"]["description"];
-					}
-				} else {
-					output += "You cannot go that way.";
-				}
-			} 
+            // Check for key in the greenhouse
+            if (playerLocation === "greenhouse" && !hasKey) {
+              output += " " + locations[playerLocation]["key"]["description"];
+            }
+          }
+        } else {
+          output += "You cannot go that way.";
+        }
+      }
 
+      else if (command[0] === "look") {
+        // Describe current location and available directions
+        output += locations[playerLocation]["description"] + " Available directions: ";
+        let directions = [];
+        for (let direction in locations[playerLocation]) {
+          if (direction !== "description" && direction !== "key") {
+            directions.push(direction);
+          }
+        }
+        output += directions.join(", ");
+        if (playerLocation === "greenhouse" && !hasKey) {
+          output += ". " + locations[playerLocation]["key"]["description"];
+        }
+      }
 
+      // Check for key in the greenhouse
+      else if (command[0] === "get") {
+        if (command[1] === "key" && playerLocation === "greenhouse") {
+          inventory.push("key");
+          locations["greenhouse"]["key"] = false;
+          output += "You get the key.";
+        } else {
+          output += "You cannot get that.";
+        }
+      }
 
-			else if (command[0] === "look") {
-				// Describe current location and available directions
-				output += locations[playerLocation]["description"] + " Available directions: ";
-				let directions = [];
-				for (let direction in locations[playerLocation]) {
-					if (direction !== "description" && direction !== "key") {
-						directions.push(direction);
-					}
-				}
-				output += directions.join(", ");
-				if (playerLocation === "greenhouse" && !hasKey) {
-					output += ". " + locations[playerLocation]["key"]["description"];
-				}
-			} 
+      else if (command[0] === "open" && command[1] === "door") {
+        if (locations[playerLocation]["open door"] !== undefined) {
+          output += locations[playerLocation]["open door"]();
+        } else {
+          output += "There is no door to open here.";
+        }
+      }
 
-			// Check for key in the greenhouse
-			else if (command[0] === "get") {
-				if (command[1] === "key" && playerLocation === "greenhouse") {
-					inventory.push("key");
-					locations["greenhouse"]["key"] = false;
-					output += "You get the key.";
-				} else {
-					output += "You cannot get that.";
-				}
-			}
+      else if (command[0] === "inv") {
+        // Check if the inventory is empty
+        if (inventory.length === 0) {
+          output += "Your inventory is empty.";
+        }
+        // If not empty, display the items in the inventory
+        else {
+          output += "Your inventory contains: " + inventory.join(", ");
+        }
+      }
 
+      // If command is not recognized, output an error message
+      else {
+        output += "Invalid command.";
+      }
 
-			else if (command[0] === "inv") {
-				// Check if the inventory is empty
-				if (inventory.length === 0) {
-					output += "Your inventory is empty.";
-				} 
-				// If not empty, display the items in the inventory
-				else {
-					
-					output += "Your inventory contains: " + inventory.join(", ");
-				}
-			}
+      // Update the game text with the output message
+      document.getElementById("game-text").innerHTML = output;
+      document.getElementById("input").value = "";
+    }
 
-			// If command is not recognized, output an error message
-			else {
-				output += "Invalid command.";
-			}
-
-			// Update the game text with the output message
-			document.getElementById("game-text").innerHTML = output;
-			document.getElementById("input").value = "";
-		}
-		
-  		document.getElementById("input").addEventListener("keyup", function(event) {
-  		// Get the value of the text input element.
-  		var input = event.target.value;
-		});
-	</script>
+    document.getElementById("input").addEventListener("keyup", function(event) {
+      // Get the value of the text input element.
+      var input = event.target.value;
+    });
+  </script>
 </body>
 </html>
