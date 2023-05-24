@@ -59,7 +59,8 @@
     // Initialize game variables
     let playerLocation = "shore";
     let hasKey = false;
-    let doorOpen = false;
+    let wallDoorOpen = false;
+    let castleDoorOpen = false;
     let inventory = [];
 
     // Define game locations and their properties
@@ -68,10 +69,10 @@
         "description": "You stand on the desolate Shore Road, caught between the vast expanse of the sea and a towering, weathered wall. The crashing waves create an eerie symphony, filling the air with anticipation. To your left, the restless tides reveal hints of the unknown, while to your right, a weathered door stands out against the aged brickwork of a high long wall.",
         "north": "garden",
         "open door": function() {
-          if (!doorOpen && playerLocation === "shore") {
-            doorOpen = true;
+          if (!wallDoorOpen && playerLocation === "shore") {
+            wallDoorOpen = true;
             return "You open the door, revealing a passage to the north.";
-          } else if (doorOpen) {
+          } else if (wallDoorOpen) {
             return "The door is already open.";
           } else {
             return "There is no door to open here.";
@@ -79,16 +80,20 @@
         }
       },
       "garden": {
-        "description": "You are in the garden. It's full of beautiful flowers.",
+        "description": "You find yourself in the garden, shrouded in darkness and drenched by the relentless rain. In the distance, barely visible through the downpour, you discern the faint outline of a castle. The garden, despite the dim light, exudes an eerie beauty with its silhouetted flowers and glistening raindrops. The howling wind carries the scent of wet earth, and the distant flicker of a solitary light from the castle's windows offers a glimmer of hope and intrigue amidst the gloom.",
         "north": "castle",
         "south": "shore"
       },
       "castle": {
-        "description": "You are standing outside a Castle.",
+        "description": "You stand outside a magnificent castle that looms above, its imposing presence casting a formidable shadow. The stone walls, weathered by time, tell tales of forgotten history. Before you, a closed door guards the entrance, evoking an air of secrecy. To the side, a bell pull hangs, waiting to be grasped.",
         "north": "stables",
         "south": "garden",
         "east": "sea",
-        "west": "greenhouse"
+        "west": "greenhouse",
+        "pull bell": function() {
+    			doorOpen = true;
+    			return "You pull the bell rope, and the resonant sound echoes through the castle's towering structure. As the bell rings in the distant tower, the heavy door before you creaks open, revealing a passage beckoning you inside.";
+    		}
       },
       "stables": {
         "description": "You are in the stables. It smells of horses.",
@@ -131,7 +136,7 @@
       if (command[0] === "go") {
         if (locations[playerLocation][command[1]] !== undefined) {
           // Check if the door is open when trying to go north from the shore
-          if (playerLocation === "shore" && command[1] === "north" && !doorOpen) {
+          if (playerLocation === "shore" && command[1] === "north" && !wallDoorOpen) {
             output += "The door is closed. You cannot go north.";
           } else {
             // Move player to new location and update output
@@ -182,6 +187,14 @@
           output += "There is no door to open here.";
         }
       }
+
+  		else if (command[0] === "ring" && command[1] === "bell") {
+    		if (playerLocation === "castle" && locations[playerLocation]["pull bell"] !== undefined) {
+      		output += locations[playerLocation]["pull bell"]();
+    		} else {
+      		output += "You cannot pull the bell here.";
+    		}
+			}
 
       else if (command[0] === "inv") {
         // Check if the inventory is empty
