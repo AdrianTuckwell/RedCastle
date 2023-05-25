@@ -16,10 +16,37 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
+
+    /* text entry field */
+    #input {
+      font-size: 18px;
+      width: 300px;
+      height: 40px; /* Adjust the height to match the button */
+      vertical-align: middle; /* Align the text vertically in the middle */
+      border: 1px solid #7D6B5F; /* Add a border with an old-world color */
+      border-radius: 5px; /* Add rounded corners */
+      background-color: #F2ECE1; /* Set a background color */
+      padding: 5px; /* Add some padding */
+      font-family: Courier, monospace;
+    }
+
+    /* Enter button */
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      height: 40px; /* Adjust the height to match the text entry field */
+      vertical-align: middle; /* Align the text vertically in the middle */
+      border: 1px solid #7D6B5F; /* Add a border with an old-world color */
+      border-radius: 5px; /* Add rounded corners */
+      background-color: #F2ECE1; /* Set a background color */
+      margin-left: 10px; /* Add some spacing between the button and the text entry field */
+      font-family: Courier, monospace;
+    }
+
   </style>
 </head>
 <body>
-  <p class="large-text">Welcome to Red Castle!</p>
+  <p class="large-text">Welcome to Redcastle!</p>
 
   <p>
     You find yourself driving along the shore road on the Beauly Firth. The year is 1957, and it's approaching midnight.
@@ -107,7 +134,7 @@
         "up": "landing"
       },
       "kitchen": {
-        "description": "You are in the kitchen.",
+        "description": "You are in the kitchen. It smells of freshly baked bread and savory spices.",
         "south": "great hall"
       },
       "library": {
@@ -190,6 +217,11 @@
           else if (playerLocation === "castle" && command[1] === "north" && !castleDoorOpen) {
             output += "The castle door is closed. You cannot go north.";
           }
+          // Check if the castle door is closed when trying to go south from the castle
+          else if (playerLocation === "great hall" && command[1] === "south" && !castleDoorOpen) {
+            output += "The castle door is locked. You cannot go south. It appears you are locked in";
+          }
+
           else {
             // Move player to new location and update output
             playerLocation = locations[playerLocation][command[1]];
@@ -209,7 +241,7 @@
 
       else if (command[0] === "look") {
         // Describe current location and available directions
-        output += locations[playerLocation]["description"] + " <br>Available directions: ";
+        output += locations[playerLocation]["description"] + " <br><br>Available directions: ";
         let directions = [];
         for (let direction in locations[playerLocation]) {
           if (direction !== "description" && direction !== "key") {
@@ -280,7 +312,7 @@
       // Check if the command counter has reached the limit
       if (commandCounter === COMMAND_LIMIT && castleDoorOpen) {
         castleDoorOpen = false;
-        output += "<br>Unexpetedly the bell rings and the castle door slams shut!";
+        output += "<br><br>Unexpetedly the bell rings and the castle door slams shut!";
       }
 
       // Update the game text with the output message
