@@ -86,7 +86,7 @@
       },
       "castle": {
         "description": "You stand outside a magnificent castle that looms above, its imposing presence casting a formidable shadow. The stone walls, weathered by time, tell tales of forgotten history. Before you, a closed door guards the entrance, evoking an air of secrecy. To the side, a bell pull hangs, waiting to be grasped.",
-        "north": "stables",
+        "north": "large hall",
         "south": "garden",
         "east": "sea",
         "west": "greenhouse",
@@ -94,6 +94,10 @@
     			doorOpen = true;
     			return "You pull the bell rope, and the resonant sound echoes through the castle's towering structure. As the bell rings in the distant tower, the heavy door before you creaks open, revealing a passage beckoning you inside.";
     		}
+      },
+      "large hall": {
+        "description": "You are in the large hall.",
+        "south": "castle"
       },
       "stables": {
         "description": "You are in the stables. It smells of horses.",
@@ -138,21 +142,27 @@
           // Check if the door is open when trying to go north from the shore
           if (playerLocation === "shore" && command[1] === "north" && !wallDoorOpen) {
             output += "The door is closed. You cannot go north.";
-          } else {
+          }
+          // Check if the castle door is open when trying to go north from the castle
+          else if (playerLocation === "castle" && command[1] === "north" && !castleDoorOpen) {
+            output += "The castle door is closed. You cannot go north.";
+          }
+          else {
             // Move player to new location and update output
             playerLocation = locations[playerLocation][command[1]];
             output += "You go " + command[1] + ". ";
             output += locations[playerLocation]["description"];
 
             // Check for key in the greenhouse
-            if (playerLocation === "greenhouse" && !hasKey) {
-              output += " " + locations[playerLocation]["key"]["description"];
+          if (playerLocation === "greenhouse" && !hasKey) {
+            output += " " + locations[playerLocation]["key"]["description"];
             }
           }
         } else {
           output += "You cannot go that way.";
         }
       }
+
 
       else if (command[0] === "look") {
         // Describe current location and available directions
@@ -181,20 +191,29 @@
       }
 
       else if (command[0] === "open" && command[1] === "door") {
-        if (locations[playerLocation]["open door"] !== undefined) {
+        if (playerLocation === "castle") {
+          if (castleDoorOpen) {
+            output += "The door is already open.";
+          } else {
+            output += "The door is locked.";
+          } 
+        } else if (locations[playerLocation]["open door"] !== undefined) {
           output += locations[playerLocation]["open door"]();
         } else {
-          output += "There is no door to open here.";
+           output += "There is no door to open here.";
         }
       }
 
+
   		else if (command[0] === "ring" && command[1] === "bell") {
     		if (playerLocation === "castle" && locations[playerLocation]["pull bell"] !== undefined) {
+          castleDoorOpen = true;
       		output += locations[playerLocation]["pull bell"]();
     		} else {
       		output += "You cannot pull the bell here.";
     		}
-			}
+			} 
+
 
       else if (command[0] === "inv") {
         // Check if the inventory is empty
@@ -216,11 +235,6 @@
       document.getElementById("game-text").innerHTML = output;
       document.getElementById("input").value = "";
     }
-
-    document.getElementById("input").addEventListener("keyup", function(event) {
-      // Get the value of the text input element.
-      var input = event.target.value;
-    });
   </script>
 </body>
 </html>
