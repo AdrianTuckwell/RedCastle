@@ -62,6 +62,8 @@
     let wallDoorOpen = false;
     let castleDoorOpen = false;
     let inventory = [];
+    let commandCounter = 0; // Initialize the command counter
+    const COMMAND_LIMIT = 3; // Define the command limit constant
 
     // Define game locations and their properties
     const locations = {
@@ -92,6 +94,7 @@
         "west": "greenhouse",
         "pull bell": function() {
     			doorOpen = true;
+          commandCounter = 0; // Reset the command counter when the door is opened
     			return "You pull the bell rope, and the resonant sound echoes through the castle's towering structure. As the bell rings in the distant tower, the heavy door before you creaks open, revealing a passage beckoning you inside.";
     		}
       },
@@ -171,6 +174,11 @@
       let command = input.toLowerCase().split(" ");
       let output = "";
 
+      // Increment the command counter for each valid command entered
+      if (command[0] !== "") {
+          commandCounter++;
+      }
+
       // Process user input based on command
       if (command[0] === "go") {
         if (locations[playerLocation][command[1]] !== undefined) {
@@ -201,7 +209,7 @@
 
       else if (command[0] === "look") {
         // Describe current location and available directions
-        output += locations[playerLocation]["description"] + " Available directions: ";
+        output += locations[playerLocation]["description"] + " <br>Available directions: ";
         let directions = [];
         for (let direction in locations[playerLocation]) {
           if (direction !== "description" && direction !== "key") {
@@ -249,6 +257,9 @@
     		}
 			} 
 
+      else if (command[0] === "counter") {
+        output += "The command counter value is: " + commandCounter;
+      }
 
       else if (command[0] === "inv") {
         // Check if the inventory is empty
@@ -264,6 +275,12 @@
       // If command is not recognized, output an error message
       else {
         output += "Invalid command.";
+      }
+
+      // Check if the command counter has reached the limit
+      if (commandCounter === COMMAND_LIMIT && castleDoorOpen) {
+        castleDoorOpen = false;
+        output += "<br>Unexpetedly the bell rings and the castle door slams shut!";
       }
 
       // Update the game text with the output message
