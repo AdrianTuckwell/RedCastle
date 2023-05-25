@@ -86,7 +86,7 @@
       },
       "castle": {
         "description": "You stand outside a magnificent castle that looms above, its imposing presence casting a formidable shadow. The stone walls, weathered by time, tell tales of forgotten history. Before you, a closed door guards the entrance, evoking an air of secrecy. To the side, a bell pull hangs, waiting to be grasped.",
-        "north": "large hall",
+        "north": "great hall",
         "south": "garden",
         "east": "sea",
         "west": "greenhouse",
@@ -95,9 +95,44 @@
     			return "You pull the bell rope, and the resonant sound echoes through the castle's towering structure. As the bell rings in the distant tower, the heavy door before you creaks open, revealing a passage beckoning you inside.";
     		}
       },
-      "large hall": {
-        "description": "You are in the large hall.",
-        "south": "castle"
+      "great hall": {
+        "description": "You are in the great hall.",
+        "north": "kitchen",
+        "south": "castle",
+        "east": "library",
+        "west": "tower",
+        "up": "landing"
+      },
+      "kitchen": {
+        "description": "You are in the kitchen.",
+        "south": "great hall"
+      },
+      "library": {
+        "description": "You are in the library.",
+        "west": "great hall"
+      },
+      "tower": {
+        "description": "You are in the tower.",
+        "west": "great hall"
+      },
+        "landing": {
+        "description": "You are on the landing.",
+        "down": "great hall",
+        "south": "bedchamber",
+        "east": "throne room",
+        "west": "study"
+      },
+      "bedchamber": {
+        "description": "You are in the bedchamber.",
+        "north": "landing"
+      },
+      "throne room": {
+        "description": "You are in the throne room.",
+        "west": "landing"
+      },
+      "study": {
+        "description": "You are in the study.",
+        "east": "landing"
       },
       "stables": {
         "description": "You are in the stables. It smells of horses.",
