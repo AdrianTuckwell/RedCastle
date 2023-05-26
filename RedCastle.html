@@ -315,6 +315,17 @@
         output += "The command counter value is: " + commandCounter;
       }
 
+      else if (command[0] === "use") {
+        if (command[1] === "torch" && inventory.includes("torch")) {
+          if (playerLocation === "tower") {
+            output += "You use the torch and illuminate the tower.";
+          } else {
+            output += "You cannot use the torch here.";
+          }
+        } else {
+          output += "You do not have a torch to use.";
+        }
+      }
       else if (command[0] === "inv") {
         // Check if the inventory is empty
         if (inventory.length === 0) {
