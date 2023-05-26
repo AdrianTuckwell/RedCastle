@@ -86,6 +86,7 @@
     // Initialize game variables
     let playerLocation = "shore";
     let hasKey = false;
+    let hasTorch = false;
     let wallDoorOpen = false;
     let castleDoorOpen = false;
     let inventory = [];
@@ -135,7 +136,14 @@
       },
       "kitchen": {
         "description": "You are in the kitchen. It smells of freshly baked bread and savory spices.",
-        "south": "great hall"
+        "south": "great hall",
+        "torch": {
+          "description": "There is a torch on the table.",
+          "takeTorch": function() {
+            hasTorch = true;
+            return "You take the torch.";
+          }
+        }
       },
       "library": {
         "description": "You are in the library.",
@@ -228,9 +236,14 @@
             output += "You go " + command[1] + ". ";
             output += locations[playerLocation]["description"];
 
-            // Check for key in the greenhouse
+          // Check for key in the greenhouse
           if (playerLocation === "greenhouse" && !hasKey) {
             output += " " + locations[playerLocation]["key"]["description"];
+            }
+
+          // Check for key in the kitchen
+          if (playerLocation === "kitchen" && !hasTorch) {
+            output += " " + locations[playerLocation]["torch"]["description"];
             }
           }
         } else {
@@ -238,13 +251,12 @@
         }
       }
 
-
       else if (command[0] === "look") {
         // Describe current location and available directions
         output += locations[playerLocation]["description"] + " <br><br>Available directions: ";
         let directions = [];
         for (let direction in locations[playerLocation]) {
-          if (direction !== "description" && direction !== "key") {
+          if (direction !== "description" && direction !== "key" && direction !== "torch") {
             directions.push(direction);
           }
         }
@@ -252,6 +264,12 @@
         if (playerLocation === "greenhouse" && !hasKey) {
           output += ". " + locations[playerLocation]["key"]["description"];
         }
+        // Check for torch in the kitchen
+        if (playerLocation === "kitchen" && !hasTorch) {
+          output += ". " + locations[playerLocation]["torch"]["description"];
+        }
+
+
       }
 
       // Check for key in the greenhouse
@@ -260,6 +278,10 @@
           inventory.push("key");
           locations["greenhouse"]["key"] = false;
           output += "You get the key.";
+        } else if (command[1] === "torch" && playerLocation === "kitchen") {
+          inventory.push("torch");
+          locations["kitchen"]["torch"] = false;
+          output += "You get the torch.";
         } else {
           output += "You cannot get that.";
         }
