@@ -89,6 +89,7 @@
     let hasTorch = false;
     let wallDoorOpen = false;
     let castleDoorOpen = false;
+    let torchUsed = false;
     let inventory = [];
     let commandCounter = 0; // Initialize the command counter
     const COMMAND_LIMIT = 3; // Define the command limit constant
@@ -315,17 +316,20 @@
         output += "The command counter value is: " + commandCounter;
       }
 
-      else if (command[0] === "use") {
-        if (command[1] === "torch" && inventory.includes("torch")) {
+      else if (command[0] === "use" && command[1] === "torch") {
+        // Verify if the player has the torch in their inventory
+        if (inventory.includes("torch")) {
+          torchUsed = true;
           if (playerLocation === "tower") {
-            output += "You use the torch and illuminate the tower.";
+            output += "You light up the torch and can now see a stone spiral staircase going up and down.";
           } else {
-            output += "You cannot use the torch here.";
-          }
+            output += "You can't use the torch here.";
+            }
         } else {
-          output += "You do not have a torch to use.";
-        }
+          output += "You don't have a torch in your inventory.";
+          } 
       }
+
       else if (command[0] === "inv") {
         // Check if the inventory is empty
         if (inventory.length === 0) {
