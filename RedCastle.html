@@ -157,7 +157,7 @@
         "down": "dungeon"
       },
       "roof": {
-        "description": "You are on th roof.",
+        "description": "You are on the roof.",
         "down": "tower"
       },
       "dungeon": {
@@ -239,6 +239,12 @@
           // Check if the castle door is closed when trying to go south from the castle
           else if (playerLocation === "great hall" && command[1] === "south" && !castleDoorOpen) {
             output += "The castle door is locked. You cannot go south. It appears you are locked in";
+          }
+
+          // Check if the tower stairs are accessed without using the torch
+          else if (playerLocation === "tower" && (command[1] === "up" || command[1] === "down") && !torchUsed) {
+            output += "In the dark, you have fallen to your death.";
+            resetGame()
           }
 
           else {
@@ -365,6 +371,17 @@
       // Update the game text with the output message
       document.getElementById("game-text").innerHTML = output;
       document.getElementById("input").value = "";
+    }
+
+    function resetGame() {
+      playerLocation = "shore";
+      wallDoorOpen = false;
+      hasKey = false;
+      hasTorch = false;
+      castleDoorOpen = false;
+      torchUsed = false;
+      inventory = [];
+      commandCounter = 0;
     }
 
     var input = document.getElementById("input");
