@@ -147,22 +147,33 @@
         }
       },
       "library": {
-        "description": "You are in the library.",
+        "description": "You are in the library. In the moonlit darkness of midnight, the library stands in eerie stillness. The shelves, adorned with ancient tomes and forgotten knowledge, seem to whisper secrets that only the night can hear. Soft moonbeams filter through the tall windows, casting ethereal shadows across the room.",
         "west": "great hall"
       },
       "tower": {
-        "description": "You are in the tower.",
+        "description": "You are in the tower, surrounded by pitch-black darkness, unaware of what lies before you.",
         "west": "great hall",
         "up": "roof",
         "down": "dungeon"
       },
+        "attic": {
+        "description": "You are in the attic, enveloped in darkness, with a mysterious aura hanging in the air and only faint moonlight seeping through the cobweb-covered windows.",
+        "down": "tower",
+        "east": "roof"
+      },
       "roof": {
-        "description": "You are on the roof.",
-        "down": "tower"
+        "description": "You are on the roof, where you can see the distant lights of Inverness twinkling in the night.",
+        "west": "attic"
       },
       "dungeon": {
-        "description": "You are in the dungeon.",
-        "up": "tower"
+        "description": "You are in a dungeon, its damp and cold atmosphere chilling your bones. Dim torchlight flickers, casting eerie shadows on the rough stone walls. The air is heavy with the scent of mildew and despair, and the sound of dripping water echoes through the corridors. Rusty shackles and broken chains serve as haunting reminders of the prisoners who once suffered here.",
+        "up": "tower",
+        "west": "tunnel"
+      },
+      "tunnel": {
+        "description": "You are in a dark tunnel. It smells of damp earth.",
+        "west": "cave",
+        "east": "tunnel"
       },
         "landing": {
         "description": "You are on the landing.",
@@ -200,15 +211,12 @@
       },
       "sea": {
         "description": "You are by the sea. You can see waves crashing on the shore.",
-        "west": "castle"
-      },
-      "tunnel": {
-        "description": "You are in a dark tunnel. It smells of damp earth.",
-        "north": "cave"
+        "east": "cave"
       },
       "cave": {
         "description": "You are in a cave. It's cold and damp. You can see a light at the end of the tunnel.",
-        "south": "tunnel"
+        "east": "tunnel",
+        "west": "sea"
       }
       // Add more locations if desired
     }
@@ -262,6 +270,13 @@
           if (playerLocation === "kitchen" && !hasTorch) {
             output += " " + locations[playerLocation]["torch"]["description"];
             }
+          
+          // Check for key at sea
+          if (playerLocation === "sea") {
+            output += "You are safe.  You have escaped.  The sun is rising and its going to be a beautiful day ";
+            resetGame()
+            }
+
           }
         } else {
           output += "You cannot go that way.";
