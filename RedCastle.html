@@ -147,8 +147,11 @@
         }
       },
       "library": {
-        "description": "You are in the library. In the moonlit darkness of midnight, the library stands in eerie stillness. The shelves, adorned with ancient tomes and forgotten knowledge, seem to whisper secrets that only the night can hear. Soft moonbeams filter through the tall windows, casting ethereal shadows across the room.",
-        "west": "great hall"
+        "description": "You are in the library. In the moonlit darkness of midnight, the library stands in eerie stillness. The shelves, adorned with ancient tomes and forgotten knowledge, seem to whisper secrets that only the night can hear. Soft moonbeams filter through the tall windows, casting ethereal shadows across the room. There is a phone on the table",
+        "west": "great hall",
+        "use phone": function() {
+          return "You pickup the phone and start to dial a breakdown company.  Suddenly there is a flash and a large crack of lightning.  The phone goes dead.";
+        }
       },
       "tower": {
         "description": "You are in the tower, surrounded by pitch-black darkness, unaware of what lies before you.",
@@ -360,6 +363,14 @@
           output += "You don't have a torch in your inventory.";
           } 
       }
+
+      else if (command[0] === "use" && command[1] === "phone") {
+        if (playerLocation === "library" && locations[playerLocation]["use phone"] !== undefined) {
+          output += locations[playerLocation]["use phone"]();
+        } else {
+          output += "There is no phone here.";
+        }
+      } 
 
       else if (command[0] === "inv") {
         // Check if the inventory is empty
